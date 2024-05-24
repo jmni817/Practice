@@ -1,0 +1,57 @@
+@font-face {
+    font-family: 'DungGeunMo';
+    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/DungGeunMo.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+body {
+    font-family: 'DungGeunMo', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 80vh;
+    margin: 0;
+    background-color: black;
+}
+
+h1 {
+    font-size: 80px;    /* 타이틀 크기 조절 */ 
+    margin-left: 50px;
+}
+
+.container {
+    text-align: center;
+}
+
+.board {
+    display: grid;
+    grid-template-columns: repeat(3, 100px);
+    grid-template-rows: repeat(3, 100px);
+    gap: 10px;
+    margin-bottom: 50px;
+    width: fit-content; /* 그리드가 내용에 맞게 크기 조절 */
+    margin: auto; /* 수평 가운데 정렬을 위해 추가 */
+}
+
+.cell {
+    width: 100px;
+    height: 100px;
+    background-color: black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 48px;
+    font-weight: bold;
+    cursor: pointer;
+    border: 3px solid #03fc17;
+}
+
+button {
+    font-family: 'DungGeunMo', sans-serif;
+    padding: 15px 30px;
+    font-size: 22px;
+    background-color: rgb(255, 255, 157);
+    margin-top: 50px;
+    cursor: pointer;
+}
