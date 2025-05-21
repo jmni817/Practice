@@ -1,0 +1,52 @@
+[현재 상태 : STATE_OPERAND1]
+1. Input operand
+2. Input operator
+3. Input '=' 
+Select an event # : 1
+A) displayInputValue)
+> 입력된 값이 출력되었습니다.
+
+[현재 상태 : STATE_OPERAND1]
+1. Input operand
+2. Input operator
+3. Input '=' 
+Select an event # : 2
+A) displayInputValue)
+> 입력된 값이 출력되었습니다.
+
+[현재 상태 : STATE_OPERATOR]
+1. Input operand
+2. Input operator
+3. Input '=' 
+Select an event # : 2
+B) overwriteOperator)
+> 입력된 연산자가 이전 연산자를 대체했습니다.
+
+[현재 상태 : STATE_OPERATOR]
+1. Input operand
+2. Input operator
+3. Input '=' 
+Select an event # : 1
+A) displayInputValue)
+> 입력된 값이 출력되었습니다.
+
+[현재 상태 : STATE_OPERAND2]
+1. Input operand
+2. Input operator
+3. Input '=' 
+Select an event # : 3
+C) displayResult)
+> 연산결과가 출력되었습니다.
+
+[현재 상태 : STATE_RESULT]
+1. Input operand
+2. Input operator
+3. Input '=' 
+Select an event # : 1
+D) eraseAllDisplayDigit)
+> 이전 결과를 지우고 새로운 입력을 받습니다.
+
+[현재 상태 : STATE_OPERAND1]
+1. Input operand
+2. Input operator
+3. Input '=' 

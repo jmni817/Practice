@@ -1,4 +1,35 @@
-﻿#include <string>
+﻿/*
+계산기 state machine 프로그램 작성하기
+
+주어진 자동판매기 state machine 코드를 이용해서 수업 시간에 연습한 계산기 state machine 프로그램을 C++ 언어로 작성하시오. 
+단, 각 transition에 action 함수는 하나만 있고 파라미터는 없도록 코드를 수정함.
+•각 action 함수가 다음과 같이 출력하도록 작성함.
+
+A) displayInputValue)
+> 입력된 값이 출력되었습니다.
+
+B) overwriteOperator)
+> 입력된 연산자가 이전 연산자를 대체했습니다.
+
+C) displayResult)
+> 연산결과가 출력되었습니다.
+
+D) eraseAllDisplayDigit)
+> 이전 연산결과를 지우고 입력된 값이 출력되었습니다.
+
+
+계산기 state machine
+
+﻿﻿계산기 동작 조건
+﻿﻿- 사칙 연산만 지원함
+﻿﻿- 피연산자는 2개이며 0과 자연수만 입력된다고 가정함
+﻿﻿- 초기 값은 0이며 이미 첫번째 피연산자에 해당된다고 가정함
+﻿﻿- 연산자가 입력된 상태에서 다른 연산자가 입력되면 기존 입력된 연산자를 덮어쓴다고 가정함
+- 연산결과가 출력된 화면에서 숫자를 입력하면 새로운 연산이 시작된다고 가정함
+﻿﻿- 1에서 9까지의 숫자가 나오기 전의 모든 ‘0' 값은 무시됨 
+   예) 000234는 234로 간주됨. 단, 0만 반복된 경우는 0으로 간주됨.
+ */
+#include <string>
 #include "StateMachine.h"
 
 
@@ -10,11 +41,11 @@
 */
 void StateMachine::run()
 {
-	int i, j;
+	int i;
 	Event curEvent;		// 현재 이벤트
 
-	curState = STATE_READY;				// 상태 초기화	//초기 상태는 ready
-    while (curState != STATE_END)		// EVENT_QUIT이 입력될 때까지 반복 수행함
+	curState = STATE_OPERAND1;				// 상태 초기화	
+    while (true)		// 반복 수행함
 	{ 
 		curEvent = getNextEvent();		// 다음 이벤트를 입력받음
 		
@@ -24,10 +55,8 @@ void StateMachine::run()
 			{ 
 				if (curEvent == table[i].event)			// 입력된 현재 이벤트와 일치하는지 검사
 				{
-					// 해당 transition이 발생할 때 수행해야 할 action 함수들을 실행시킴
-					for (j = 0; j < table[i].number_of_actions; j++)				
-						(this->*table[i].action[j])(table[i].action_parameter[j]);
-
+					// 해당 transition이 발생할 때 수행해야 할 action 함수 실행시킴			
+					(this->*table[i].action)();
 					curState = table[i].nextState;		// 테이블에 정의된 다음 상태로 현재 상태를 변경함
 					break;
 				}
@@ -52,10 +81,9 @@ Event StateMachine::getNextEvent()
 
 	// 입력 안내 메세지 출력
 	cout << "[현재 상태 : " << getCurrentStateString() << "]" << endl;
-	cout << "1. Deposit a 100 won coin" << endl;
-	cout << "2. Press the refund button" << endl;
-	cout << "3. Press the beverage button you want" << endl;
-	cout << "4. Quit" << endl;
+	cout << "1. Input operand" << endl;
+	cout << "2. Input operator" << endl;
+	cout << "3. Input '=' " << endl;
 	cout << "Select an event # : ";
 
 	// 사용자로부터 이벤트 입력받음
@@ -65,18 +93,13 @@ Event StateMachine::getNextEvent()
 	switch (inputEvent)
 	{
 	case 1:
-		selectedEvent = EVENT_INSERT_100;
+		selectedEvent = EVENT_INPUT_OPERAND;
 		break;
 	case 2:
-		selectedEvent = EVENT_REFUND_BUTTON_PRESSED;
+		selectedEvent = EVENT_INPUT_OPERATOR;
 		break;
 	case 3:
-		selectedEvent = EVENT_BEVERAGE_BUTTON_PRESSED;
-		break;
-	case 4:		
-	default : 
-		selectedEvent = EVENT_QUIT;
-		curState = STATE_END;
+		selectedEvent = EVENT_INPUT_EQUAL;
 	}
 
 	return selectedEvent;
@@ -85,56 +108,49 @@ Event StateMachine::getNextEvent()
 
 
 /*
-	함수 이름 : StateMachine::displayInsertedMoney()
-	기능	  : LED 화면에 현재 투입된 금액을 표시함
-	전달 인자 : displayedMoneyAmount -> 화면에 출력될 금액
+	
+	기능	  : LED 화면에 현재 입력된 숫자를 표시함
 	반환값    : 없음
 */
-void StateMachine::displayInsertedMoney(int displayedMoneyAmount)
+void StateMachine::displayInputValue()
 {
-	cout << "현재 투입된 금액은 " << displayedMoneyAmount << "원입니다." << endl;
+	cout << "A) displayInputValue)\n> 입력된 값이 출력되었습니다.";
 }
 
 
 
 /*
-	함수 이름 : StateMachine::refundCoins()
-	기능	  : 반환 버튼을 눌렀을 때 투입된 금액을 반환함
-	전달 인자 : refundedMoneyAmount -> 반환될 금액
+	
+	기능	  : 연산자 덮어쓰기
 	반환값    : 없음
 */
-void StateMachine::refundCoins(int refundedMoneyAmount)
+void StateMachine::overwriteOperator()
 {
-	cout << "반환되는 금액은 " << refundedMoneyAmount << "원입니다." << endl;
+	cout << "B) overwriteOperator)\n> 입력된 연산자가 이전 연산자를 대체했습니다.";
 }
 
 
 
 /*
-	함수 이름 : StateMachine::turnLight()
-	기능	  : 음료 버튼에 조명을 켜거나 끄는 동작 수행함.  
-	전달 인자 : lightOn -> 1: on, 0: off
+	
+	기능	  : 연산 결과 출력
 	반환값    : 없음
 */
-void StateMachine::turnLight(int lightOn)
+void StateMachine::displayResult()
 {
-	if(lightOn == 1)
-		cout << "음료 버튼의 조명이 켜졌습니다." << endl;
-	else
-		cout << "음료 버튼의 조명이 꺼졌습니다." << endl;
+	cout << "C) displayResult)\n> 연산결과가 출력되었습니다.";
 }
 
 
 
 /*
-	함수 이름 : StateMachine::releaseBeverage()
-	기능	  : 선택한 음료를 외부로 내보냄.  
-	전달 인자 : 매개변수는 필요 없지만 다른 함수와 매개변수를 맞추기 위해 동일하게 정의됨(dummy parameter)
+	
+	기능	  : 모든 연산 내용을 삭제.  
 	반환값    : 없음
 */
-void StateMachine::releaseBeverage(int dummy)
+void StateMachine::eraseAllDisplayDigit()
 {
-	cout << "음료가 나왔습니다." << endl;
+	cout << "D) eraseAllDisplayDigit)\n> 이전 결과를 지우고 새로운 입력을 받습니다.";
 }
 
 
@@ -150,14 +166,17 @@ string StateMachine::getCurrentStateString()
 
 	switch (curState)
 	{
-	case STATE_READY:
-		returnedString = "STATE_READY";
+	case STATE_OPERAND1:
+		returnedString = "STATE_OPERAND1";
 		break;
-	case STATE_100_INSERTED:
-		returnedString = "STATE_100_INSERTED";
+	case STATE_OPERATOR:
+		returnedString = "STATE_OPERATOR";
 		break;
-	case STATE_200_INSERTED:
-		returnedString = "STATE_200_INSERTED";
+	case STATE_OPERAND2:
+		returnedString = "STATE_OPERAND2";
+		break;
+	case STATE_RESULT:
+		returnedString = "STATE_RESULT"; 
 	}
 
 	return returnedString;
